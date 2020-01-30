@@ -1,18 +1,20 @@
 const router = require('koa-router')();
-const { loginCheck } = require('../controller/user');
+const { login } = require('../controller/user');
+const { SuccessModel, ErrorModel } = require('../model/resModel');
 
 router.prefix('/api/user');
-
 router.post('/login', async function (ctx, next) {
+    console.log(`开始登录了：${JSON.stringify(ctx.request.body)}`);
     const { username, password } = ctx.request.body;
-    const result = loginCheck(username, password);
-    return result.then(loginData => {
-        if (loginData.username.length > 0) {
-            ctx.body = {
-                msg: '登录成功了'
-            }
-        }
-    });
+    const data = await login(username, password);
+    if (data.username) {
+        // 设置session
+        ctx.session.username = data.username;
+        ctx.session.realname = data.realname;
+        ctx.body = new SuccessModel();
+        return ;
+    }
+    ctx.body = new ErrorModel('登录失败');
 });
 
 router.get('/session-test', async function (ctx, next) {
@@ -26,4 +28,4 @@ router.get('/session-test', async function (ctx, next) {
     }
 });
 
-module.exports = router
+module.exports = router;

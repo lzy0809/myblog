@@ -13,6 +13,8 @@ const users = require('./routes/users')
 const blog = require('./routes/blog')
 const user = require('./routes/user')
 
+const { REDIS_CONF } = require('./conf/db');
+
 // error handler
 onerror(app)
 
@@ -45,9 +47,9 @@ app.use(session({
     httpOnly: true,
     maxAge: 24*60*60*1000 // 有效时间为24h
   },
-  // store: redisStore({
-  //   all: '127.0.0.1:9528'
-  // })
+  store: redisStore({
+    all: `${REDIS_CONF.host}:${REDIS_CONF.port}`
+  })
 }));
 
 // routes

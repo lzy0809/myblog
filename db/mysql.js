@@ -18,4 +18,7 @@ exec = (sql) => {
     return promise;
 };
 
-module.exports = exec;
+module.exports = {
+  exec,
+  escape
+};

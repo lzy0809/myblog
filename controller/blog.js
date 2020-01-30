@@ -1,6 +1,7 @@
-const exec = require('../db/mysql');
+const { exec } = require('../db/mysql');
+// const xss = require('xss');
 
-const getList = (author, keyword) => {
+const getList = async (author, keyword) => {
     let sql = `select * from blogs where 1=1 `;
     if (author) {
         sql += `and author='${author}' `;
@@ -9,39 +10,36 @@ const getList = (author, keyword) => {
         sql += `and title like '%${keyword}%' `;
     }
     sql += `order by createtime desc;`;
-    return exec(sql);
+    return await exec(sql);
 };
 
-const getDetail = (id) => {
+const getDetail = async (id) => {
     const sql = `select * from blogs where id='${id}';`;
-    return  exec(sql).then(rows => {
-        return rows[0];
-    });
+    const rows = await exec(sql);
+    return rows[0];
 };
 
-const newBlog = (blogData) => {
+const newBlog = async (blogData) => {
     const { title, content, author } = blogData;
     const createTime = Date.now();
     const sql = `insert into blogs (title, content, createtime, author) values ('${title}', '${content}', '${createTime}', '${author}');`;
-    return exec(sql).then(insertData => {
-        // console.log(`add blog is ${JSON.stringify(insertData)}`);
-        return insertData.insertId;
-    });
+    const  insertData = await exec(sql);
+    return {
+        id: insertData.insertId
+    };
 };
 
-const updateBlog = (id, blogData) => {
+const updateBlog = async (id, blogData) => {
     const { title, content } = blogData;
     const sql = `update blogs set title='${title}' ,content='${content}' where id='${id}';`;
-    return exec(sql).then(updateData => {
-        return updateData.affectedRows > 0;
-    });
+    const updateData = await exec(sql);
+    return updateData.affectedRows > 0;
 };
 
-const delBlog = (id, author) => {
+const delBlog = async (id, author) => {
     const sql = `delete from blogs where id='${id}' and author='${author}';`;
-    return exec(sql).then(delData => {
-        return delData.affectedRows > 0;
-    });
+    const delData = await exec(sql);
+    return delData.affectedRows > 0;
 };
 
 

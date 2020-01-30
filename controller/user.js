@@ -1,16 +1,16 @@
-const exec = require('../db/mysql');
+const { exec, escape } = require('../db/mysql');
+const { genPassword } = require('../utils/cryp');
 
-const loginCheck = (username, password) => {
+const login = async (username, password) => {
+    username = escape(username);
+    // 生成加密密码
+    password = genPassword(password);
+    password = escape(password);
     const sql = `select username, password from users where username='${username}' and password='${password}';`;
-    return exec(sql).then(rows => {
-        if (rows.length > 0) {
-            return rows[0];
-        } else {
-
-        }
-    });
+    const rows = await exec(sql);
+    return rows[0] || {};
 };
 
 module.exports = {
-    loginCheck
+    login
 };
