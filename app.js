@@ -47,9 +47,9 @@ app.use(session({
     httpOnly: true,
     maxAge: 24*60*60*1000 // 有效时间为24h
   },
-  store: redisStore({
-    all: `${REDIS_CONF.host}:${REDIS_CONF.port}`
-  })
+  // store: redisStore({
+  //   all: `${REDIS_CONF.host}:${REDIS_CONF.port}`
+  // })
 }));
 
 // routes

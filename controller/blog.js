@@ -20,10 +20,12 @@ const getDetail = async (id) => {
 };
 
 const newBlog = async (blogData) => {
+    console.log(`请求的：${JSON.stringify(blogData)}`);
     const { title, content, author } = blogData;
     const createTime = Date.now();
     const sql = `insert into blogs (title, content, createtime, author) values ('${title}', '${content}', '${createTime}', '${author}');`;
     const  insertData = await exec(sql);
+    console.log(`哈哈：${JSON.stringify(insertData)}`);
     return {
         id: insertData.insertId
     };

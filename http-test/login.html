@@ -41,11 +41,12 @@
                 if (res.errno === 0) {
                     // 登录成功
                     location.href = './admin.html'
-                    alert(`登录成功`)
                 } else {
                     // 登录失败
                     alert(res.message)
                 }
+            }).catch(err => {
+                alert(err);
             })
         })
     </script>

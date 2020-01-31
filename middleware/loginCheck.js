@@ -1,11 +1,10 @@
-const { ErrorModel } = require('../model/resModel');
+const { ErronModel } = require('../model/resModel');
 
 module.exports = async (ctx, next) => {
-    console.log(`新增加播客1111`);
+    console.log(`前置校验：${JSON.stringify(ctx.session)}`);
     if (ctx.session.username) {
         await next();
         return ;
     }
-    console.log(`新增加播客3333`);
-    ctx.body = new ErrorModel('用户未登录');
+    ctx.body = new ErronModel('用户未登录');
 };

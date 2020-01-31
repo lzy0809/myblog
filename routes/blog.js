@@ -40,6 +40,7 @@ router.post('/new', loginCheck, async (ctx, next) => {
     const body = ctx.request.body;
     body.author = ctx.session.username;
     const newData = await newBlog(body);
+    console.log(`呵呵：${JSON.stringify(newData)}`);
     ctx.body = new SuccessModel(newData);
 });
 // 更新播客
